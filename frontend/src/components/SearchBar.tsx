@@ -1,9 +1,9 @@
 import { FormEvent, useState } from "react";
-import { useSearchContext } from "../contexts/SearchContext";
-import { MdTravelExplore } from "react-icons/md";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { MdTravelExplore } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useSearchContext } from "../contexts/SearchContext";
 
 const SearchBar = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const SearchBar = () => {
       onSubmit={handleSubmit}
       className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 items-center gap-4"
     >
-      <div className="flex flex-row items-center flex-1 bg-white p-2">
+      <div className="flex flex-row items-center flex bg-white p-2">
         <MdTravelExplore size={25} className="mr-2" />
         <input
           placeholder="Where are you going?"
@@ -94,11 +94,11 @@ const SearchBar = () => {
           minDate={minDate}
           maxDate={maxDate}
           placeholderText="Check-out Date"
-          className="min-w-full bg-white p-2 focus:outline-none"
-          wrapperClassName="min-w-full"
+          className="w-full bg-white p-2 focus:outline-none "
+          wrapperClassName="w-full"
         />
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-2">
         <button className="w-2/3 bg-blue-600 text-white h-full p-2 font-bold text-xl hover:bg-blue-500">
           Search
         </button>
