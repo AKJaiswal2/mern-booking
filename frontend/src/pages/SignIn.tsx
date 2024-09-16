@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export type SignInFormData = {
   email: string;
@@ -16,11 +16,19 @@ const SignIn = () => {
 
   const location = useLocation();
 
+  const guestCredentials = {
+    email: "guest@gmail.com",
+    password: "guest@123",
+  };
+
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<SignInFormData>();
+    setError,
+  } = useForm<SignInFormData>({
+     defaultValues: guestCredentials,
+  });
 
   const mutation = useMutation(apiClient.signIn, {
     onSuccess: async () => {
@@ -33,9 +41,35 @@ const SignIn = () => {
     },
   });
 
-  const onSubmit = handleSubmit((data) => {
-    mutation.mutate(data);
+   const onSubmit = handleSubmit((data) => {
+    const { email, password } = data;
+
+    // Check if fields are empty, show error
+    if (!email || !password) {
+      if (!email) {
+        setError("email", {
+          type: "manual",
+          message: "Email is required",
+        });
+      }
+      if (!password) {
+        setError("password", {
+          type: "manual",
+          message: "Password is required",
+        });
+      }
+      return;
+    }
+
+    // Use guest credentials if the values haven't changed
+    if (email === guestCredentials.email && password === guestCredentials.password) {
+      mutation.mutate(guestCredentials);
+    } else {
+      // Use the new credentials if changed
+      mutation.mutate({ email, password });
+    }
   });
+
 
   return (
     <form className="flex flex-col gap-5" onSubmit={onSubmit}>
